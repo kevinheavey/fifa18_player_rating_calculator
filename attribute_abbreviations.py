@@ -1,5 +1,6 @@
 """Maps abbreviations to player attributes (e.g. ac = acceleration) 
-through the get_abbreviation_dict function"""
+through the get_abbreviation_dict function. 
+This is useful because the JavaScript function uses the abbreviations, not full names."""
 from bs4 import BeautifulSoup
 import requests
 
@@ -20,6 +21,7 @@ def _get_player_attribute_list_items(player_number=DEFAULT_PLAYER_NUMBER):
     return player_attribute_list_items
     
 def get_abbreviation_dict(player_number=DEFAULT_PLAYER_NUMBER):
+    """Matches the player attributes to their abbreviations. Returns a dict"""
     player_attribute_list_items = _get_player_attribute_list_items(player_number=DEFAULT_PLAYER_NUMBER)
     abbreviation_dict = {}
     for item in player_attribute_list_items:
