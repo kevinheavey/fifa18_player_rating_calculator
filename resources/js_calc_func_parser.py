@@ -1,10 +1,6 @@
 import json
-import os
 import attribute_abbreviations
-
-
-def file_in_same_dir(filename):
-    return os.path.join(os.path.dirname(__file__), filename)
+from utils import file_in_same_dir
 
 def read_file():
     js_filepath = file_in_same_dir('fifa_calculator.js')
