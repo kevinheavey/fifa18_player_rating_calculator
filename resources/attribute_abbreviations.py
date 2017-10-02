@@ -4,7 +4,7 @@ This is useful because the JavaScript function uses the abbreviations, not full 
 from bs4 import BeautifulSoup
 import requests
 import json
-import os
+from utils import file_in_same_dir
 
 DEFAULT_PLAYER_NUMBER = 20801 # any number works
 
@@ -41,8 +41,7 @@ def get_abbreviation_dict(player_number=DEFAULT_PLAYER_NUMBER):
     
 def main(player_number=DEFAULT_PLAYER_NUMBER):
     abbreviation_dict = get_abbreviation_dict(player_number)
-    dirname = os.path.dirname(__file__)
-    path = os.path.join(dirname, 'abbreviation_dict.json')
+    path = file_in_same_dir('abbreviation_dict.json')
     with open(path, 'w') as fp:
         json.dump(abbreviation_dict, fp)
         
