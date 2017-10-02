@@ -16,6 +16,7 @@ def scrape_calculator_page(player_number=DEFAULT_PLAYER_NUMBER):
 
 def _get_player_attribute_list_items(player_number=DEFAULT_PLAYER_NUMBER):
     """returns a list of HTML <li>s which we use to map abbreviations to player attributes"""
+    soup = scrape_calculator_page(player_number)
     html_article = soup.find('article')
     player_attribute_list_items = html_article.find_all('li', class_='text-clip')
     return player_attribute_list_items
