@@ -3,7 +3,7 @@ from os.path import join, dirname
 
 
 def get_position_blueprint_dict():
-    parent_dir = dirname(dirname(__file__))
+    parent_dir = dirname(__file__)
     filepath = join(parent_dir, 'resources', 'position_rating_blueprint.json')
     with open(filepath, 'r') as fp:
         return json.load(fp)
