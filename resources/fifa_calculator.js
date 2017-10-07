@@ -1,3 +1,5 @@
+// Source code for the player rating calculator on sofifa.com
+
 function calc() {
     var a = 0;
     a = .21 * $('input[name="gd"]').val() 
