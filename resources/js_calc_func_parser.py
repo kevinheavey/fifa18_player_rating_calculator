@@ -1,6 +1,5 @@
 import json
-import attribute_abbreviations
-from utils import file_in_same_dir
+from resources.utils import file_in_same_dir
 
 def read_file():
     js_filepath = file_in_same_dir('fifa_calculator.js')
