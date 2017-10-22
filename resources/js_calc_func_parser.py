@@ -27,7 +27,7 @@ def func_from_line(line):
 
 def stat_abbrev_from_line(line):
     loc = line.find('"') + 1
-    return line[loc:loc + 2]
+    return line[loc:loc + 2].upper()
 
 def coef_from_line(line):
     loc = line.find('.')
