@@ -20,14 +20,14 @@ def get_abbreviation_dict():
 
 def player_pos_from_line(line):
     loc = line.find('#') + 1
-    return line[loc:line.find('"', loc)]
+    return line[loc:line.find('"', loc)].upper()
 
 def func_from_line(line):
     return line[line.find('=') + 2]
 
 def stat_abbrev_from_line(line):
     loc = line.find('"') + 1
-    return line[loc:loc + 2].upper()
+    return line[loc:loc + 2]
 
 def coef_from_line(line):
     loc = line.find('.')
