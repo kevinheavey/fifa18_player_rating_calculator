@@ -2,10 +2,14 @@ import json
 from pathlib import Path
 
 
-def get_position_blueprint_dict():
+def get_position_blueprint_dict(position_subset=None):
     filepath = Path(__file__).parent / 'resources' / 'position_rating_blueprint.json'
     with open(filepath, 'r') as fp:
-        result = json.load(fp)
+        json_dict = json.load(fp)
+    if position_subset is not None:
+        result = {pos: json_dict[pos] for pos in position_subset}
+    else:
+        result = json_dict
     return result
 
 
@@ -26,8 +30,8 @@ def process_raw_rating(rating, international_reputation, rep_subtraction, potent
     return capped_contrib
 
 
-def calculate_ratings(attribute_dict):
-    position_blueprint_dict = get_position_blueprint_dict()
+def calculate_ratings(attribute_dict, position_subset=None):
+    position_blueprint_dict = get_position_blueprint_dict(position_subset)
     root_positions = position_blueprint_dict.keys()
     international_rep = attribute_dict['International reputation']
     potential = attribute_dict['Potential']
