@@ -32,12 +32,10 @@ def process_raw_rating(rating, international_reputation, rep_subtraction, potent
 
 def calculate_ratings(attribute_dict, position_subset=None):
     position_blueprint_dict = get_position_blueprint_dict(position_subset)
-    root_positions = position_blueprint_dict.keys()
     international_rep = attribute_dict['International reputation']
     potential = attribute_dict['Potential']
     position_ratings = {}
-    for position in root_positions:
-        sub_dict = position_blueprint_dict[position]
+    for position, sub_dict in position_blueprint_dict.items():
         coefficient_dict = sub_dict['coefficients']
         rep_subtraction = sub_dict['reputation_subtraction']
         raw_position_rating = sum(coefficient * attribute_dict[stat]
