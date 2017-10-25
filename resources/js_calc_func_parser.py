@@ -13,7 +13,7 @@ def get_calc_func_sections():
     calc_func_sections = calc_func.split('a = .')
     return calc_func_sections   
     
-def get_abbreviation_dict():
+def read_abbreviation_dict():
     filepath = file_in_same_dir('abbreviation_dict.json')
     with open(filepath, 'r') as fp:
         return json.load(fp)
@@ -34,7 +34,7 @@ def coef_from_line(line):
     return float('0' + line[loc:loc + 3])
 
 def process_formula(formula):
-    abbreviation_dict = get_abbreviation_dict()
+    abbreviation_dict = read_abbreviation_dict()
     coefficient_dict = {}
     for line in formula.split('\n'):
         stat_abbrev = stat_abbrev_from_line(line)
