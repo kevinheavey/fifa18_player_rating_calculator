@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import functools
-
+from resources.js_calc_func_parser import read_abbreviation_dict
 
 @functools.lru_cache()
 def get_position_blueprint_dict(position_subset=None):
@@ -60,8 +60,12 @@ def calculate_ratings_from_frame(attribute_df, position_subset=None):
     blueprint_items = list(blueprint.items())
     blueprint_keys = list(blueprint.keys())
     coefs_df = pd.DataFrame({pos: subdict['coefficients'] for pos, subdict in blueprint_items}).fillna(0)
+    relevant_positions = coefs_df.index
     rep_subtractions = pd.Series({pos: subdict['reputation_subtraction'] for pos, subdict in blueprint_items})
-    raw_pos_ratings = attribute_df.drop(['International reputation', 'Potential'], axis=1).dot(coefs_df)
+    raw_pos_ratings = (attribute_df
+                       .drop(['International reputation', 'Potential'], axis=1)
+                       .filter(relevant_positions)
+                       .dot(coefs_df))
     internat_reps = _duplicate_col(attribute_df['International reputation'], blueprint_keys)
 
     internat_rep_increases = (internat_reps - rep_subtractions).where(lambda df: df >= 1, 1)
