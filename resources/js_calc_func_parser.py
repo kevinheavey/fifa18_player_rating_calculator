@@ -20,7 +20,7 @@ def read_abbreviation_dict():
 
 def player_pos_from_line(line):
     loc = line.find('#') + 1
-    return line[loc:line.find('"', loc)].upper()
+    return line[loc:line.find('"', loc)].lower()
 
 def func_from_line(line):
     return line[line.find('=') + 2]
