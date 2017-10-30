@@ -34,7 +34,11 @@ def get_abbreviation_dict(player_number=DEFAULT_PLAYER_NUMBER):
             player_attribute_full_name = item.text.strip()
             abbreviation_dict[player_attribute_abbreviation] = player_attribute_full_name
     # international reputation came separately from the other attributes
-    abbreviation_dict['ir'] = 'International reputation'
+    abbreviation_dict['ir'] = 'international_reputation'
+    # give the dict values underscores instead of spaces
+    # and make them lowercase
+    # this comes in handy for pandas DataFrames
+    abbreviation_dict = {key:val.lower().replace(' ', '_') for key, val in abbreviation_dict.items()}
     return abbreviation_dict
     
 def main(player_number=DEFAULT_PLAYER_NUMBER):
