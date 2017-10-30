@@ -1,10 +1,9 @@
 import json
 from pathlib import Path
 import functools
-from resources.js_calc_func_parser import read_abbreviation_dict
 
 @functools.lru_cache()
-def get_position_blueprint_dict(position_subset=None):
+def read_position_blueprint_dict(position_subset=None):
     filepath = Path(__file__).parent / 'resources' / 'position_rating_blueprint.json'
     with open(filepath, 'r') as fp:
         json_dict = json.load(fp)
@@ -33,9 +32,9 @@ def process_raw_rating(rating, international_reputation, rep_subtraction, potent
 
 
 def calculate_ratings(attribute_dict, position_subset=None):
-    position_blueprint_dict = get_position_blueprint_dict(position_subset)
-    international_rep = attribute_dict['International reputation']
-    potential = attribute_dict['Potential']
+    position_blueprint_dict = read_position_blueprint_dict(position_subset)
+    international_rep = attribute_dict['international_reputation']
+    potential = attribute_dict['potential']
     position_ratings = {}
     for position, sub_dict in position_blueprint_dict.items():
         coefficient_dict = sub_dict['coefficients']
@@ -56,21 +55,21 @@ def _duplicate_col(single_col, dupe_names):
 def calculate_ratings_from_frame(attribute_df, position_subset=None):
     import pandas as pd
 
-    blueprint = get_position_blueprint_dict(position_subset)
+    blueprint = read_position_blueprint_dict(position_subset)
     blueprint_items = list(blueprint.items())
     blueprint_keys = list(blueprint.keys())
     coefs_df = pd.DataFrame({pos: subdict['coefficients'] for pos, subdict in blueprint_items}).fillna(0)
     relevant_positions = coefs_df.index
     rep_subtractions = pd.Series({pos: subdict['reputation_subtraction'] for pos, subdict in blueprint_items})
     raw_pos_ratings = (attribute_df
-                       .drop(['International reputation', 'Potential'], axis=1)
+                       .drop(['international_reputation', 'potential'], axis=1)
                        .filter(relevant_positions)
                        .dot(coefs_df))
-    internat_reps = _duplicate_col(attribute_df['International reputation'], blueprint_keys)
+    internat_reps = _duplicate_col(attribute_df['international_reputation'], blueprint_keys)
 
     internat_rep_increases = (internat_reps - rep_subtractions).where(lambda df: df >= 1, 1)
     uncapped_ratings = raw_pos_ratings.round() + internat_rep_increases
-    potentials = _duplicate_col(attribute_df['Potential'], blueprint_keys)
+    potentials = _duplicate_col(attribute_df['potential'], blueprint_keys)
     calculated_ratings = uncapped_ratings.where(uncapped_ratings <= potentials, potentials)
 
     return calculated_ratings
