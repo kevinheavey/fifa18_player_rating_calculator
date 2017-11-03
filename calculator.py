@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import pandas as pd
 import functools
 
 @functools.lru_cache()
@@ -52,13 +53,19 @@ def _duplicate_col(single_col, dupe_names):
             .assign(**{dupe_name:lambda df: df[name] for dupe_name in dupe_names})
             .drop(name, axis=1))
 
+def _get_coefs_df(position_subset=None, blueprint_items=None):
+    if blueprint_items is None:
+        blueprint_items = list(read_position_blueprint_dict(position_subset).items())
+    coefs_df = pd.DataFrame({pos: subdict['coefficients']
+                             for pos, subdict in blueprint_items}).fillna(0)
+    return coefs_df
+
 def calculate_ratings_from_frame(attribute_df, position_subset=None):
-    import pandas as pd
 
     blueprint = read_position_blueprint_dict(position_subset)
     blueprint_items = list(blueprint.items())
     blueprint_keys = list(blueprint.keys())
-    coefs_df = pd.DataFrame({pos: subdict['coefficients'] for pos, subdict in blueprint_items}).fillna(0)
+    coefs_df = _get_coefs_df(position_subset, blueprint_items)
     relevant_positions = coefs_df.index
     rep_subtractions = pd.Series({pos: subdict['reputation_subtraction'] for pos, subdict in blueprint_items})
     raw_pos_ratings = (attribute_df
